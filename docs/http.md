@@ -39,26 +39,5 @@ HTTP определяет следующую структуру ответног
 - PUT: обновить существующий ресурс
 - DELETE: Удалить ресурс
 
-#  Contract First подход к разработке REST API
-Потребитель должен знать детали предоставляемой услуги. По этой причине должен быть заключен договор. Договор на обслуживание определяет:
-
-- Каковы входы и выходы из сервиса?
-- По какому URL-адресу доступен сервис?
-- Как отправлять авторизацию?
-
-## When
-https://dzone.com/articles/design-first-or-code-first-whats-the-best-approach
-
-- When Developer Experience Matters
-- When Delivering Mission-Critical APIs
-- When Ensuring Good Communication
-
-
-# Code-First подход
-
-## When
-- When Delivery Speedy Matters
-- When Developing Internal APIs
-- 
-
+#
 

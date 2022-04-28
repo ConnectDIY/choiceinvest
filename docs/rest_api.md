@@ -13,3 +13,25 @@ REST расшифровывается как REpresentational State Transfer.
 - **Определение сервиса**: не существует стандарта для этого, а REST является гибким. Это может быть недостатком в некоторых сценариях, поскольку потребляющему приложению может быть необходимо понимать форматы запросов и ответов. Однако широко используются такие языки определения веб-приложений, как WADL (Web Application Definition Language) и Swagger.
 
 REST фокусируется на ресурсах и на том, насколько эффективно вы выполняете операции с ними, используя HTTP.
+
+ Contract First подход к разработке REST API
+Потребитель должен знать детали предоставляемой услуги. По этой причине должен быть заключен договор. Договор на обслуживание определяет:
+
+- Каковы входы и выходы из сервиса?
+- По какому URL-адресу доступен сервис?
+- Как отправлять авторизацию?
+
+## When
+https://dzone.com/articles/design-first-or-code-first-whats-the-best-approach
+
+- When Developer Experience Matters
+- When Delivering Mission-Critical APIs
+- When Ensuring Good Communication
+
+
+# Code-First подход
+
+## When
+- When Delivery Speedy Matters
+- When Developing Internal APIs
+- 
