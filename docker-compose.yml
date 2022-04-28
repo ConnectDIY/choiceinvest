@@ -1,0 +1,6 @@
+version: 3
+services:
+  backend:
+    image: "${DOCKER_IMAGE_BACKEND?Varible not set}"
+    env_file:
+      - .env
