@@ -157,4 +157,4 @@ Versioning is usually done with /v1/, /v2/, etc. added at the start of the API p
 1. Best practices for REST API design - https://stackoverflow.blog/2020/03/02/best-practices-for-rest-api-design/
 2. Best practices for REST API security: Authentication and authorization
     - https://stackoverflow.blog/2021/10/06/best-practices-for-authentication-and-authorization-for-rest-apis/
-3. 
+3.  http://stateless.co/hal_specification.html or to https://jsonapi.org/ for hateoas introduction
