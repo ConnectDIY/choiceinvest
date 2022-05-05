@@ -6,6 +6,9 @@ REST расшифровывается как REpresentational State Transfer.
 Определите, какие ресурсы вы хотите открыть для внешнего мира Используйте глаголы, уже определенные протоколом HTTP, для
 выполнения операций с этими ресурсами.
 
+Ресурс — это концептуальное сопоставление с набором сущностей, а не сущность, которая соответствует сопоставлению в
+любой конкретный момент времени.
+
 Вот как обычно реализуется служба REST:
 
 - **Формат обмена данными**: здесь нет никаких ограничений. JSON — очень популярный формат, хотя можно использовать и
@@ -32,6 +35,70 @@ https://dzone.com/articles/design-first-or-code-first-whats-the-best-approach
 - When Developer Experience Matters
 - When Delivering Mission-Critical APIs
 - When Ensuring Good Communication
+
+## Naming
+
+Source: https://restfulapi.net/resource-naming/
+
+For example, “customers” is a collection resource and “customer” is a singleton resource.
+
+Принято называть ресурсы во множественном числе. Если мы обращаемся к одному из множества, то это выглядит так
+`/customers/{customerId}`.
+
+Также конкретный кастомер может иметь внутри себя под-коллекцию
+`/customers/{customerId}/accounts`, а тот в свою очердь конкретный аккаунт
+`/customers/{customerId}/accounts/{accountId}`.
+
+Для большей ясности давайте разделим архетипы ресурсов на четыре категории
+
+- документ
+- коллекция
+- хранилище
+- контроллер
+
+Тогда было бы лучше, если бы вы всегда стремились поместить ресурс в один архетип, а затем последовательно
+использовали его соглашение об именах. Ради единообразия не поддавайтесь искушению создавать ресурсы, представляющие
+собой гибриды более чем одного архетипа.
+
+Ресурс документа — это отдельная концепция, аналогичная экземпляру объекта или записи в базе данных.
+
+Use “singular” name to denote document resource archetype.
+
+    http://api.example.com/device-management/managed-devices/{device-id}
+    http://api.example.com/user-management/users/{id}
+    http://api.example.com/user-management/users/admin
+
+Ресурс коллекции — это управляемый сервером каталог ресурсов.
+
+Клиенты могут предлагать новые ресурсы для добавления в коллекцию. Тем не менее, ресурс коллекции сам решает, создавать
+новый ресурс или нет.
+
+Use the “plural” name to denote the collection resource archetype.
+
+    http://api.example.com/device-management/managed-devices
+    http://api.example.com/user-management/users
+    http://api.example.com/user-management/users/{id}/accounts
+
+Хранилище — это репозиторий ресурсов, управляемый клиентом. Не в смысле, что он у клиента хранится, а в том смысле, что
+этими данными юзер сам управляет. Ресурс хранилища позволяет клиенту API put ресурсы, получать
+их обратно и решать, когда их удалить.
+
+Use “plural” name to denote store resource archetype.
+
+A store never generates new URIs. Instead, each stored resource has a URI. The URI was chosen by a client when the
+resource initially put it into the store.
+
+    http://api.example.com/song-management/users/{id}/playlists
+
+Ресурс контроллера моделирует процедурную концепцию. Ресурсы контроллера похожи на исполняемые функции с параметрами и
+возвращаемыми значениями, входными и выходными данными.
+
+    http://api.example.com/cart-management/users/{id}/cart/checkout 
+    http://api.example.com/song-management/users/{id}/playlist/play
+
+# Terms
+
+RESTful - так называются приложения, которые полностью соответствуют всем REST ограничениям.
 
 # Code-First подход
 
@@ -122,13 +189,21 @@ Common error HTTP status codes include:
 - 503 Service Unavailable – This indicates that something unexpected happened on server side (It can be anything like
   server overload, some parts of the system failed, etc.).
 
-## Allow filtering, sorting, and pagination
+## Allow filtering, sorting, and pagination. Use query component to filter URI collection.
 
 Т.к. часто на бэкенде находятся базы с большим кол-вом данных, то фильтровать/сортировать/и разделять на страницы это
 хорошая практика.
 
 E.g.
 `http://example.com/articles?sort=+author,-datepublished`
+
+For this requirement, do not create new APIs – instead, enable sorting, filtering, and pagination capabilities in
+resource collection API and pass the input parameters as query parameters. e.g.
+
+    http://api.example.com/device-management/managed-devices
+    http://api.example.com/device-management/managed-devices?region=USA
+    http://api.example.com/device-management/managed-devices?region=USA&brand=XYZ
+    http://api.example.com/device-management/managed-devices?region=USA&brand=XYZ&sort=installation-date
 
 ## Maintain good security practices
 
@@ -142,9 +217,11 @@ SSL-сертификат не так уж сложно загрузить на �
 иметь более детализированные роли для каждого пользователя.
 
 ## Cache data to improve performance
+
 Вещь нужная. Есть разные решения, одно из наиболее популярных - redis.
 
-If you are using caching, you should also include Cache-Control information in your headers. This will help users effectively use your caching system.
+If you are using caching, you should also include Cache-Control information in your headers. This will help users
+effectively use your caching system.
 
 ## Versioning our APIs
 
@@ -152,9 +229,48 @@ Versioning is usually done with /v1/, /v2/, etc. added at the start of the API p
 
 `app.get('/v1/employees', (req, res)`
 
+## Do not use trailing forward slash (/) in URIs
+
+    http://api.example.com/device-management/managed-devices/ 
+    http://api.example.com/device-management/managed-devices  /*This is much better version*/
+
+## Use hyphens (-) to improve the readability of URIs
+
+    http://api.example.com/device-management/managed-devices/
+    http://api.example.com/device-management/managed-devices 	/*This is much better version*/
+
+## Do not use underscores ( _ )
+
+Можно использовать подчеркивание вместо дефиса, который будет использоваться в качестве разделителя. Но в зависимости от
+шрифта приложения возможно, что символ подчеркивания (_) может быть частично скрыт или полностью скрыт в некоторых
+браузерах или на некоторых экранах.
+
+To avoid this confusion, use hyphens (-) instead of underscores ( _ ).
+
+    http://api.example.com/inventory-management/managed-entities/{id}/install-script-location  //More readable
+    http://api.example.com/inventory-management/managedEntities/{id}/installScriptLocation  //Less readable
+
+## Use lowercase letters in URIs
+
+## Do not use file extensions
+
+    http://api.example.com/device-management/managed-devices.xml  /*Do not use it*/
+    http://api.example.com/device-management/managed-devices 	/*This is correct URI*/
+
+## Never use CRUD function names in URIs
+
+We should use HTTP request methods to indicate which CRUD function is performed.
+
+    HTTP GET http://api.example.com/device-management/managed-devices  //Get all devices
+    HTTP POST http://api.example.com/device-management/managed-devices  //Create new Device
+    HTTP GET http://api.example.com/device-management/managed-devices/{id}  //Get device for given Id
+    HTTP PUT http://api.example.com/device-management/managed-devices/{id}  //Update device for given Id
+    HTTP DELETE http://api.example.com/device-management/managed-devices/{id}  //Delete device for given Id
+
 # Links
 
 1. Best practices for REST API design - https://stackoverflow.blog/2020/03/02/best-practices-for-rest-api-design/
 2. Best practices for REST API security: Authentication and authorization
     - https://stackoverflow.blog/2021/10/06/best-practices-for-authentication-and-authorization-for-rest-apis/
-3.  http://stateless.co/hal_specification.html or to https://jsonapi.org/ for hateoas introduction
+3. http://stateless.co/hal_specification.html or to https://jsonapi.org/ for hateoas introduction
+4. https://restfulapi.net/ -- отличный ресурс по REST, здесь я нашёл много best practice по ресурсам и их URI
