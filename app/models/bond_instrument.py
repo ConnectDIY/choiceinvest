@@ -11,3 +11,4 @@ class BondInstrument(BaseModel):
     # amortization_info = relationship("AmortizationInfo")
     year_percent = Column(Float)
     maturity_date = Column(Date)
+    face_value = Column(Float)
