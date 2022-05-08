@@ -39,5 +39,5 @@ HTTP определяет следующую структуру ответног
 - PUT: обновить существующий ресурс
 - DELETE: Удалить ресурс
 
-#
-
+# Links
+1. HTTP status codes - описание для каждого кода - https://restapitutorial.ru/httpstatuscodes.html
