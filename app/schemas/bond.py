@@ -5,7 +5,7 @@ from pydantic import BaseModel, EmailStr
 from app.schemas.security_type import SecurityType
 
 
-class Security(BaseModel):
+class Bond(BaseModel):
     id: int
-    type_id: SecurityType
-    wallet_id: int
+    instrument: int
+    value: float
