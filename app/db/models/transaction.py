@@ -1,6 +1,4 @@
-from app.models.base import BaseModel
-from sqlalchemy import Column, Float
-from sqlalchemy.orm import relationship
+from app.db.base import BaseModel
 
 
 class Transaction(BaseModel):
