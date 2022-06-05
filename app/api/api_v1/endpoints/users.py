@@ -1,38 +1,29 @@
 from hashlib import md5
+from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel, EmailStr
+from sqlalchemy.orm import Session
+
+from app.db import crud
+from app.db.session import get_db
 
 from app.schemas.user import User, UserCreate, UserInDB
 
 router = APIRouter()
 
-users = []
 
-last_id = 0
-
-
-def gen_id() -> int:
-    global last_id
-    last_id += 1
-    return last_id
+@router.post("/users", response_model=User)
+async def create_user(user_create: UserCreate, db: Session = Depends(get_db)):
+    return crud.create_user(db=db, user=user_create)
 
 
-@router.post("/users")
-async def create_user(user_create: UserCreate):
-    users.append(UserInDB(name=user_create.name,
-                          email=user_create.email,
-                          id=gen_id(),
-                          hashed_password=md5(user_create.password.encode()).hexdigest()
-                          ))
+@router.get("/users", response_model=List[User])
+async def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    return crud.get_users(db, skip=skip, limit=limit)
 
 
-@router.get("/users")
-async def get_users():
-    return users
-
-
-@router.get("/users/{user_id}")
-async def get_user(user_id):
+@router.get("/users/{user_id}", response_model=User)
+async def get_user(user_id, db: Session = Depends(get_db)):
     """Returns the concrete user from DB."""
-    return users
+    return crud.get_user(db, user_id)
