@@ -8,7 +8,7 @@ def create_tables():
 
 
 def drop_tables():
-    pass
+    Base.metadata.drop_all(engine)
 
 
 if __name__ == '__main__':
