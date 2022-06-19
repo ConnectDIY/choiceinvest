@@ -7,13 +7,19 @@ logging.basicConfig(level=logging.DEBUG, format='%(levelname)s | %(asctime)s | %
 logger = logging.getLogger(__name__)
 logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
-from app.db.preapare_db import create_tables
+from app.db.preapare_db import create_tables, drop_tables
 
-try:
-    logger.info("Try create tables")
-    create_tables()
-except Exception as e:
-    logger.exception(e)
+# try:
+#     logger.info("Try to create tables")
+#     create_tables()
+# except Exception as e:
+#     logger.exception(e)
+#     logger.info("Drop tables")
+#     drop_tables()
+#     logger.info("Try to create tables")
+#     create_tables()
+# else:
+#     logger.info("Tables were successfully created")
 
 
 logger.info('Run FastAPI server')

@@ -4,7 +4,7 @@ from app.db import engine
 
 
 def create_tables():
-    Base.metadata.create_all(engine)
+    Base.metadata.create_all(engine, checkfirst=False)
 
 
 def drop_tables():
