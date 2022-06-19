@@ -15,15 +15,15 @@ router = APIRouter()
 
 @router.post("/users", response_model=User)
 async def create_user(user_create: UserCreate, db: Session = Depends(get_db)):
-    return crud.create_user(db=db, user=user_create)
+    return crud.user.create(db=db, obj_in=user_create)
 
 
 @router.get("/users", response_model=List[User])
 async def get_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return crud.get_users(db, skip=skip, limit=limit)
+    return crud.user.get_multi(db, skip=skip, limit=limit)
 
 
 @router.get("/users/{user_id}", response_model=User)
 async def get_user(user_id, db: Session = Depends(get_db)):
     """Returns the concrete user from DB."""
-    return crud.get_user(db, user_id)
+    return crud.user.get(db, user_id)
