@@ -24,5 +24,5 @@ class WalletInDBBase(WalletBase):
         orm_mode = True
 
 
-class WalletInDB(WalletInDBBase):
+class Wallet(WalletInDBBase):
     pass

@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from app.db import crud
 from app.db.session import get_db
 
-from app.schemas.user import User, UserCreate, UserInDB
+from app.schemas.user import User, UserCreate
 
 router = APIRouter()
 
